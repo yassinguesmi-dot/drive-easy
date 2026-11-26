@@ -1,0 +1,11 @@
+server:
+  port: ${PORT:8081}
+spring:
+  application:
+    name: vehicule-service
+info:
+  app:
+    name: DriveEasy Vehicle Service
+    description: In-memory vehicle fleet management API
+driveeasy:
+  seed-data: true

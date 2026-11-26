@@ -1,0 +1,40 @@
+@page {
+  size: A4;
+  margin: 18mm 16mm 18mm;
+}
+
+body {
+  color: #233247;
+  font: 10pt/1.55 "Segoe UI", Arial, sans-serif;
+}
+
+h1, h2, h3 {
+  color: #122541;
+  font-family: "Segoe UI", Arial, sans-serif;
+  page-break-after: avoid;
+}
+
+h1 {
+  margin-top: 12mm;
+  padding-bottom: 5mm;
+  border-bottom: 2px solid #3374d4;
+  font-size: 25pt;
+}
+
+h2 {
+  margin-top: 10mm;
+  border-bottom: 1px solid #dfe6ef;
+  padding-bottom: 2mm;
+  font-size: 16pt;
+}
+
+h3 { margin-top: 7mm; font-size: 12pt; }
+p, li { orphans: 3; widows: 3; }
+blockquote { padding: 3mm 5mm; border-left: 3px solid #3c78d8; background: #f2f6fc; color: #52657d; }
+table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+th { background: #edf3fb; color: #1d3556; }
+th, td { padding: 2.5mm; border: 1px solid #dfe6ef; vertical-align: top; }
+pre { padding: 4mm; overflow-wrap: anywhere; white-space: pre-wrap; background: #f4f6f9; border: 1px solid #e3e8ef; font-size: 7pt; }
+code { font-family: Consolas, monospace; }
+a { color: #225eb7; text-decoration: none; }
+tr, blockquote, pre { break-inside: avoid; }

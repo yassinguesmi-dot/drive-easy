@@ -1,0 +1,11 @@
+server:
+  port: ${PORT:8082}
+spring:
+  application:
+    name: client-service
+info:
+  app:
+    name: DriveEasy Client Service
+    description: In-memory client and eligibility API
+driveeasy:
+  seed-data: true

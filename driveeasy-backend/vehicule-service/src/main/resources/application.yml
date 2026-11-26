@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: vehicule-service
+  config:
+    import: configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+  cloud:
+    config:
+      fail-fast: true
+info:
+  app:
+    name: DriveEasy Vehicle Service
+    version: 1.0.0

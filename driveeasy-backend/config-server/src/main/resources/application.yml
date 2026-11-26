@@ -1,0 +1,30 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${CONFIG_REPO_URI:file:../config-repo}
+          default-label: master
+          clone-on-start: true
+          search-paths:
+            - "{application}"
+            - .
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
+info:
+  app:
+    name: DriveEasy Config Server
+    description: Git-backed centralized configuration

@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: location-service
+  config:
+    import: configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+  cloud:
+    config:
+      fail-fast: true
+info:
+  app:
+    name: DriveEasy Location Service
+    version: 1.0.0
+resilience4j:
+  circuitbreaker:
+    instances:
+      driveEasyClients:
+        sliding-window-size: 10
+        failure-rate-threshold: 50

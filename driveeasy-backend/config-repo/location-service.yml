@@ -1,0 +1,19 @@
+server:
+  port: ${PORT:8083}
+spring:
+  application:
+    name: location-service
+info:
+  app:
+    name: DriveEasy Location Service
+    description: In-memory rental lifecycle and orchestration API
+driveeasy:
+  seed-data: true
+clients:
+  vehicle-service:
+    url: ${VEHICLE_SERVICE_URL:http://vehicule-service}
+  client-service:
+    url: ${CLIENT_SERVICE_URL:http://client-service}
+spring.cloud.openfeign:
+  circuitbreaker:
+    enabled: true
