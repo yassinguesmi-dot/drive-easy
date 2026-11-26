@@ -7,7 +7,8 @@ export const apiErrorInterceptor: HttpInterceptorFn = (request, next) => {
   const errors = inject(ApiErrorService);
   return next(request).pipe(catchError((error: unknown) => {
     if (error instanceof HttpErrorResponse) {
-      const message = error.error?.detail ?? error.error?.message
+      const body = error.status === 0 ? null : error.error;
+      const message = body?.detail ?? body?.message
         ?? `Erreur API (${error.status || 'réseau'}). Vérifiez que le backend est démarré.`;
       errors.show(message);
     }

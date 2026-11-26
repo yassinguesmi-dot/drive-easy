@@ -47,3 +47,9 @@ export interface LocationDetail {
   client: { id: string; nom: string; prenom: string; categorieClient: string };
   vehicule: { id: string; immatriculation: string; marque: string; modele: string; kilometrage: number };
 }
+
+/** Référence courte affichée pour un contrat (ex. « #DEMO-1 » ou « #3F2A9C1B »). */
+export function locationReference(id: string): string {
+  const raw = id.startsWith('location-') ? id.slice('location-'.length) : id.slice(0, 8);
+  return `#${raw.toUpperCase()}`;
+}

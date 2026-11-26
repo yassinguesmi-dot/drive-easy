@@ -7,6 +7,7 @@ import { Vehicule } from '../models/vehicule';
 import { LocationSimulation } from '../models/location';
 import { ClientService } from '../services/client.service';
 import { LocationService } from '../services/location.service';
+import { localIsoDate } from '../core/local-date';
 
 @Component({
   standalone: true,
@@ -63,11 +64,11 @@ export class LocationWizardComponent implements OnInit {
   readonly quoteResult = signal<LocationSimulation | null>(null);
   readonly searched = signal(false);
   readonly saving = signal(false);
-  readonly today = new Date().toISOString().slice(0, 10);
+  readonly today = localIsoDate();
   clientId = '';
   vehiculeId = '';
   dateDebut = this.today;
-  dateFinPrevue = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+  dateFinPrevue = localIsoDate(1);
 
   ngOnInit(): void { this.clientsService.list().subscribe(items => this.clients.set(items)); }
 

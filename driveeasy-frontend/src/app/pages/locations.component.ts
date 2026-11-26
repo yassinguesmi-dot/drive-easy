@@ -2,8 +2,10 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Location, LocationPage } from '../models/location';
+import { Location, LocationPage, locationReference } from '../models/location';
 import { LocationService } from '../services/location.service';
+import { ClientService } from '../services/client.service';
+import { VehiculeService } from '../services/vehicule.service';
 
 @Component({
   standalone: true,
@@ -16,7 +18,7 @@ import { LocationService } from '../services/location.service';
       </div>
       <div class="table-wrap"><table><thead><tr><th>RÉFÉRENCE</th><th>VÉHICULE</th><th>CLIENT</th><th>PÉRIODE</th><th>MONTANT</th><th>STATUT</th><th>ACTIONS</th></tr></thead><tbody>
         @for (location of page()?.content || []; track location.id) {
-          <tr><td><b>#{{ location.id.slice(0, 8).toUpperCase() }}</b></td><td>{{ location.vehiculeId }}</td><td>{{ location.clientId }}</td><td>{{ location.dateDebut | date:'dd/MM/yy' }} – {{ location.dateFinPrevue | date:'dd/MM/yy' }}</td><td>{{ location.montantTotal | currency:'EUR':'symbol':'1.0-0' }}</td><td><span class="status-pill" [class]="location.statut.toLowerCase()">{{ location.statut }}</span></td>
+          <tr><td><b>{{ reference(location.id) }}</b></td><td>{{ vehicleLabel(location.vehiculeId) }}</td><td>{{ clientLabel(location.clientId) }}</td><td>{{ location.dateDebut | date:'dd/MM/yy' }} – {{ location.dateFinPrevue | date:'dd/MM/yy' }}</td><td>{{ location.montantTotal | currency:'EUR':'symbol':'1.0-0' }}</td><td><span class="status-pill" [class]="location.statut.toLowerCase()">{{ location.statut }}</span></td>
             <td>@if (location.statut === 'RESERVEE') { <button class="link-button" (click)="start(location)">Départ</button><button class="link-button" (click)="cancel(location)">Annuler</button> } @else if (location.statut === 'EN_COURS') { <a class="text-link" [routerLink]="['/locations', location.id, 'retour']">Retour</a> } @else { <a class="text-link" [routerLink]="['/locations', location.id, 'retour']">Détails</a> }</td></tr>
         } @empty { <tr><td colspan="7" class="empty-cell">Aucune location pour ces filtres.</td></tr> }
       </tbody></table></div>
@@ -25,13 +27,30 @@ import { LocationService } from '../services/location.service';
 })
 export class LocationsComponent implements OnInit {
   private readonly service = inject(LocationService);
+  private readonly vehicleService = inject(VehiculeService);
+  private readonly clientService = inject(ClientService);
+  readonly reference = locationReference;
   readonly page = signal<LocationPage | null>(null);
   readonly currentPage = signal(0);
   status = '';
   dateDebut = '';
   dateFin = '';
 
-  ngOnInit(): void { this.load(0); }
+  ngOnInit(): void {
+    this.load(0);
+    this.vehicleService.list().subscribe({ error: () => undefined });
+    this.clientService.list().subscribe({ error: () => undefined });
+  }
+
+  vehicleLabel(id: string): string {
+    const vehicle = this.vehicleService.vehicles().find(item => item.id === id);
+    return vehicle ? `${vehicle.marque} ${vehicle.modele} · ${vehicle.immatriculation}` : id;
+  }
+
+  clientLabel(id: string): string {
+    const client = this.clientService.clients().find(item => item.id === id);
+    return client ? `${client.prenom} ${client.nom}` : id;
+  }
   load(page: number): void {
     if (page < 0) return;
     this.service.list(page, this.status, this.dateDebut, this.dateFin).subscribe(result => {
