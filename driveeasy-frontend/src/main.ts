@@ -10,4 +10,4 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes),
     provideHttpClient(withInterceptors([apiErrorInterceptor]))
   ]
-}).catch((error: unknown) => console.error('RentCar startup failed', error));
+}).catch((error: unknown) => console.error('Drive Easy startup failed', error));

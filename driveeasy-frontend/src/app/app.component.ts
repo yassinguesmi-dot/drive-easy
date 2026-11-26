@@ -14,7 +14,7 @@ import { ApiErrorService } from './core/api-error.service';
     } @else {
       <div class="shell">
         <aside class="sidebar">
-          <a class="brand" routerLink="/dashboard"><span class="brand-mark">R</span><span>Rent<span>Car</span></span></a>
+          <a class="brand" routerLink="/dashboard"><span class="brand-mark">D</span><span>Drive <span>Easy</span></span></a>
           <p class="nav-caption">ESPACE AGENCE</p>
           <nav>
             <a routerLink="/dashboard" routerLinkActive="active"><span>◫</span> Tableau de bord</a>
@@ -23,10 +23,10 @@ import { ApiErrorService } from './core/api-error.service';
             <a routerLink="/locations" routerLinkActive="active"><span>↗</span> Locations</a>
             <a routerLink="/espace-client"><span>✦</span> Portail client</a>
           </nav>
-          <div class="sidebar-footer">RentCar · Portail agence</div>
+          <div class="sidebar-footer">Drive Easy · Portail agence</div>
         </aside>
         <main class="main">
-          <header class="topbar"><span class="crumb">RentCar <span>/</span> Gestion de flotte</span><div class="avatar">AG</div></header>
+          <header class="topbar"><span class="crumb">Drive Easy <span>/</span> Gestion de flotte</span><div class="avatar">AG</div></header>
           @if (errors.message(); as message) {
             <div class="error-banner" role="alert"><span>{{ message }}</span><button (click)="errors.clear()">Fermer</button></div>
           }

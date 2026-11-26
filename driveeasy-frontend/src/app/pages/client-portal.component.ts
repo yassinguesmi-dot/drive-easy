@@ -43,7 +43,7 @@ const DEMO_VEHICLES: Vehicule[] = [
   template: `
     <div class="customer-portal">
       <header class="customer-nav">
-        <a class="portal-brand" routerLink="/espace-client"><span class="portal-brand-mark">R</span>rent<span>car</span></a>
+        <a class="portal-brand" routerLink="/espace-client"><span class="portal-brand-mark">D</span><span>Drive</span><span>Easy</span></a>
         <nav aria-label="Navigation principale">
           <a href="#flotte">Notre flotte</a>
           <a href="#services">Services</a>
@@ -141,7 +141,7 @@ const DEMO_VEHICLES: Vehicule[] = [
                     <label>Numéro de permis<input formControlName="numeroPermis" placeholder="Numéro de votre permis" required></label>
                     <label>Permis valable jusqu'au<input type="date" formControlName="dateExpirationPermis" required></label>
                     <label class="full-field">Adresse de résidence<input formControlName="adresse" autocomplete="street-address" placeholder="Rue, ville, code postal" required></label>
-                    <label class="privacy-check full-field"><input type="checkbox" [checked]="acceptedTerms()" (change)="acceptedTerms.set($any($event.target).checked)"><span>J'accepte que mes informations soient utilisées pour créer mon dossier de location. Un agent RentCar pourra me contacter au sujet de cette réservation.</span></label>
+                    <label class="privacy-check full-field"><input type="checkbox" [checked]="acceptedTerms()" (change)="acceptedTerms.set($any($event.target).checked)"><span>J'accepte que mes informations soient utilisées pour créer mon dossier de location. Un agent Drive Easy pourra me contacter au sujet de cette réservation.</span></label>
                     <div class="form-footer full-field"><button class="back-button" type="button" (click)="step.set(1)">← Retour au véhicule</button><button class="find-car-button" type="submit" [disabled]="form.invalid || !acceptedTerms() || preparing()">{{ preparing() ? 'Préparation…' : 'Voir mon estimation'}<span>→</span></button></div>
                   </form>
                   <p class="form-reassurance"><span>⌑</span> Pas de paiement maintenant. L'équipe confirme votre réservation.</p>
@@ -174,7 +174,7 @@ const DEMO_VEHICLES: Vehicule[] = [
               <div class="success-confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
               <span class="success-medallion">✓</span><span class="section-kicker">UNE NOUVELLE HISTOIRE COMMENCE</span>
               <h2>C'est dans la boîte, {{ registeredClient()?.prenom }}.</h2>
-              <p>Votre demande est bien enregistrée. Notre équipe RentCar vous contactera pour confirmer les derniers détails.</p>
+              <p>Votre demande est bien enregistrée. Notre équipe Drive Easy vous contactera pour confirmer les derniers détails.</p>
               <div class="success-reference"><span>RÉFÉRENCE DE RÉSERVATION</span><b>#{{ booking()!.id.slice(0, 8).toUpperCase() }}</b></div>
               <div class="success-summary"><div><span>Votre voiture</span><b>{{ selectedVehicle()?.marque }} {{ selectedVehicle()?.modele }}</b></div><div><span>Vos dates</span><b>{{ dateDebut() | date:'dd MMM yyyy' }} — {{ dateFin() | date:'dd MMM yyyy' }}</b></div><div><span>Estimation</span><b>{{ booking()!.montantTotal | currency:'EUR':'symbol':'1.2-2' }}</b></div></div>
               <a class="confirm-booking-button success-link" routerLink="/espace-client">Revenir à l'accueil <span>→</span></a>
@@ -249,7 +249,7 @@ const DEMO_VEHICLES: Vehicule[] = [
           <div class="about-copy" data-scroll-reveal>
             <span class="section-kicker">À PROPOS DE DRIVE EASY</span>
             <h2>La liberté de partir, avec l'esprit tranquille.</h2>
-            <p>RentCar vous accompagne dans la location de votre voiture avec un parcours simple : vous choisissez votre véhicule et vos dates, vous recevez une estimation, puis notre équipe prend le relais pour confirmer votre demande.</p>
+            <p>Drive Easy vous accompagne dans la location de votre voiture avec un parcours simple : vous choisissez votre véhicule et vos dates, vous recevez une estimation, puis notre équipe prend le relais pour confirmer votre demande.</p>
             <p>Notre priorité : vous donner les informations essentielles dès le départ et rester disponibles à chaque étape de votre réservation.</p>
             <a class="about-booking-link" href="#reserver">Préparer mon prochain trajet <span>↗</span></a>
           </div>
@@ -261,7 +261,7 @@ const DEMO_VEHICLES: Vehicule[] = [
         </section>
       </main>
 
-      <footer class="customer-footer"><a class="portal-brand" routerLink="/espace-client"><span class="portal-brand-mark">R</span>rent<span>car</span></a><span>Moins de contraintes. Plus de route. © RentCar 2026</span><a class="customer-dashboard-button" routerLink="/dashboard">Aller au tableau de bord <span>↗</span></a></footer>
+      <footer class="customer-footer"><a class="portal-brand" routerLink="/espace-client"><span class="portal-brand-mark">D</span><span>Drive</span><span>Easy</span></a><span>Moins de contraintes. Plus de route. © Drive Easy 2026</span><a class="customer-dashboard-button" routerLink="/dashboard">Aller au tableau de bord <span>↗</span></a></footer>
     </div>
   `
 })
