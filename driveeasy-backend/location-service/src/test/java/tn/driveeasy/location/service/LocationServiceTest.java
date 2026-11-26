@@ -81,6 +81,25 @@ class LocationServiceTest {
         assertThat(service.availableVehicles(start, end)).containsExactly(vehicle);
     }
 
+    @Test
+    void lateReturnAddsPenaltyOfOneAndHalfDailyRatePerLateDay() {
+        LocalDate today = LocalDate.now();
+        Location running = new Location("late", "client-1", "vehicle-1",
+                today.minusDays(5), today.minusDays(3), null, 1000, null, new BigDecimal("100.00"),
+                new BigDecimal("200.00"), BigDecimal.ZERO, StatutLocation.EN_COURS, LocalDateTime.now());
+        repository.save(running);
+        when(vehicleClient.getVehicle("vehicle-1")).thenReturn(vehicle("vehicle-1"));
+        when(clientClient.getClient("client-1"))
+                .thenReturn(new LocationDtos.Client("client-1", "Nom", "Prénom", "STANDARD"));
+
+        Location finished = service.finish("late", 1300, today);
+
+        // 5 jours facturés (500) + 3 jours de retard × 1,5 × 100 (450)
+        assertThat(finished.statut()).isEqualTo(StatutLocation.TERMINEE);
+        assertThat(finished.penalite()).isEqualByComparingTo("450.00");
+        assertThat(finished.montantTotal()).isEqualByComparingTo("950.00");
+    }
+
     private LocationDtos.Vehicle vehicle(String id) {
         return new LocationDtos.Vehicle(id, id, "Marque", "Modèle", 2026,
                 "Noir", "ESSENCE", "MANUELLE", 5, 0,

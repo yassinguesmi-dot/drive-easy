@@ -12,6 +12,8 @@
         <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-openfeign</artifactId></dependency>
         <!-- Client HTTP compatible PATCH (le client JDK par défaut de Feign le refuse) -->
         <dependency><groupId>io.github.openfeign</groupId><artifactId>feign-hc5</artifactId></dependency>
+        <!-- Instrumente Feign : propage le contexte de trace vers les services appelés (Zipkin) -->
+        <dependency><groupId>io.github.openfeign</groupId><artifactId>feign-micrometer</artifactId></dependency>
         <dependency><groupId>org.springframework.cloud</groupId><artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId></dependency>
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-actuator</artifactId></dependency>
         <dependency><groupId>io.micrometer</groupId><artifactId>micrometer-tracing-bridge-brave</artifactId></dependency>

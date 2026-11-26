@@ -6,6 +6,11 @@ spring:
   cloud:
     config:
       fail-fast: true
+    # Exécute les appels Feign protégés dans le thread de la requête :
+    # le contexte de trace (Zipkin) est ainsi propagé vers les services appelés.
+    circuitbreaker:
+      resilience4j:
+        disable-thread-pool: true
 info:
   app:
     name: DriveEasy Location Service
