@@ -37,6 +37,21 @@ class LocationServiceTest {
     }
 
     @Test
+    void seedsCompletedDemoLocationsWithoutActiveReservations() {
+        List<Location> demoLocations = repository.findAll();
+
+        assertThat(demoLocations).hasSize(4)
+                .allSatisfy(location -> {
+                    assertThat(location.id()).startsWith("location-demo-");
+                    assertThat(location.statut()).isEqualTo(StatutLocation.TERMINEE);
+                    assertThat(location.dateRetourEffectif()).isNotNull()
+                            .isBeforeOrEqualTo(LocalDate.now());
+                });
+        assertThat(demoLocations).extracting(Location::clientId)
+                .containsExactlyInAnyOrder("client-demo-1", "client-demo-2", "client-demo-3", "client-demo-4");
+    }
+
+    @Test
     void availableVehiclesExcludesVehiclesAlreadyReservedForTheRequestedPeriod() {
         LocalDate start = LocalDate.now().plusDays(5);
         LocalDate end = start.plusDays(3);

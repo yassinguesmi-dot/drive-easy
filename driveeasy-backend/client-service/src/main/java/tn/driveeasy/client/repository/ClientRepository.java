@@ -17,8 +17,17 @@ public class ClientRepository {
         LocalDate today = LocalDate.now();
         Client demo = new Client("client-demo-1", "12345678", "Ben Ali", "Amira",
                 LocalDate.of(1995, 6, 12), "amira@example.com", "+21620000001", "Tunis",
-                "TN-DEMO-001", today.plusYears(3), "STANDARD", today, 0);
+                "TN-DEMO-001", today.plusYears(3), "STANDARD", today, 1);
         entries.put(demo.id(), demo);
+        entries.put("client-demo-2", new Client("client-demo-2", "23456789", "Trabelsi", "Yassine",
+                LocalDate.of(1988, 3, 24), "yassine.demo@example.com", "+21620000002", "Sousse",
+                "TN-DEMO-002", today.plusYears(3), "STANDARD", today, 1));
+        entries.put("client-demo-3", new Client("client-demo-3", "34567890", "Mansour", "Nour",
+                LocalDate.of(1992, 9, 8), "nour.demo@example.com", "+21620000003", "Sfax",
+                "TN-DEMO-003", today.plusYears(3), "STANDARD", today, 1));
+        entries.put("client-demo-4", new Client("client-demo-4", "45678901", "Gharbi", "Sami",
+                LocalDate.of(1985, 1, 17), "sami.demo@example.com", "+21620000004", "Tunis",
+                "TN-DEMO-004", today.plusYears(3), "STANDARD", today, 1));
     }
 
     public List<Client> findAll() { return List.copyOf(entries.values()); }
