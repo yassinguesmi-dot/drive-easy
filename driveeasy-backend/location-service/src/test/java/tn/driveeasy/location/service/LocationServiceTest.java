@@ -37,6 +37,21 @@ class LocationServiceTest {
     }
 
     @Test
+    void seedsCompletedDemoLocationsWithoutActiveReservations() {
+        List<Location> demoLocations = repository.findAll();
+
+        assertThat(demoLocations).hasSize(4)
+                .allSatisfy(location -> {
+                    assertThat(location.id()).startsWith("location-demo-");
+                    assertThat(location.statut()).isEqualTo(StatutLocation.TERMINEE);
+                    assertThat(location.dateRetourEffectif()).isNotNull()
+                            .isBeforeOrEqualTo(LocalDate.now());
+                });
+        assertThat(demoLocations).extracting(Location::clientId)
+                .containsExactlyInAnyOrder("client-demo-1", "client-demo-2", "client-demo-3", "client-demo-4");
+    }
+
+    @Test
     void availableVehiclesExcludesVehiclesAlreadyReservedForTheRequestedPeriod() {
         LocalDate start = LocalDate.now().plusDays(5);
         LocalDate end = start.plusDays(3);
@@ -64,6 +79,25 @@ class LocationServiceTest {
         when(vehicleClient.getAvailable(start, end)).thenReturn(List.of(vehicle));
 
         assertThat(service.availableVehicles(start, end)).containsExactly(vehicle);
+    }
+
+    @Test
+    void lateReturnAddsPenaltyOfOneAndHalfDailyRatePerLateDay() {
+        LocalDate today = LocalDate.now();
+        Location running = new Location("late", "client-1", "vehicle-1",
+                today.minusDays(5), today.minusDays(3), null, 1000, null, new BigDecimal("100.00"),
+                new BigDecimal("200.00"), BigDecimal.ZERO, StatutLocation.EN_COURS, LocalDateTime.now());
+        repository.save(running);
+        when(vehicleClient.getVehicle("vehicle-1")).thenReturn(vehicle("vehicle-1"));
+        when(clientClient.getClient("client-1"))
+                .thenReturn(new LocationDtos.Client("client-1", "Nom", "Prénom", "STANDARD"));
+
+        Location finished = service.finish("late", 1300, today);
+
+        // 5 jours facturés (500) + 3 jours de retard × 1,5 × 100 (450)
+        assertThat(finished.statut()).isEqualTo(StatutLocation.TERMINEE);
+        assertThat(finished.penalite()).isEqualByComparingTo("450.00");
+        assertThat(finished.montantTotal()).isEqualByComparingTo("950.00");
     }
 
     private LocationDtos.Vehicle vehicle(String id) {

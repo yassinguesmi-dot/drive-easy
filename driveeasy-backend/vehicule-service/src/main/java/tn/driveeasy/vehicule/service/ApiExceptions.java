@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -37,6 +38,12 @@ public class ApiExceptions {
                     .map(error -> error.getField() + ": " + error.getDefaultMessage()).findFirst().orElse("Requête invalide.")
                 : ex.getMessage();
         return detail(HttpStatus.BAD_REQUEST, message);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ProblemDetail unreadable(HttpMessageNotReadableException ex) {
+        return detail(HttpStatus.BAD_REQUEST, "Corps de requête JSON invalide ou mal formé.");
     }
 
     @ExceptionHandler(Exception.class)

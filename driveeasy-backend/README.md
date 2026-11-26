@@ -42,6 +42,8 @@ Depuis `driveeasy-backend`, dans PowerShell :
 docker compose up -d
 ```
 
+Pour démarrer uniquement Zipkin, utiliser `docker compose up -d zipkin`; son interface est disponible sur http://localhost:9411.
+
 Le dépôt local `config-repo` est initialisé une seule fois par le script Windows. Pour utiliser un dépôt distant, définir `CONFIG_REPO_URI` avec son URL Git et configurer les identifiants Git selon l'environnement.
 
 Démarrer les applications dans cet ordre, chacune dans un terminal séparé :
@@ -109,7 +111,7 @@ Exemple de réservation :
 }
 ```
 
-La réponse de création est `201`; les validations renvoient `400`, les conflits `409`, les ressources absentes `404` et les erreurs internes `500`. Les données de démonstration sont recréées à chaque redémarrage : quatre véhicules (Toyota Yaris, Hyundai Tucson, Renault Clio et Kia Sportage) et un client éligible.
+La réponse de création est `201`; les validations renvoient `400`, les conflits `409`, les ressources absentes `404` et les erreurs internes `500`. Les données de démonstration sont recréées à chaque redémarrage : quatre véhicules (Toyota Yaris, Hyundai Tucson, Renault Clio et Kia Sportage), quatre clients éligibles et quatre locations terminées. Les dates des locations sont calculées par rapport au jour du démarrage; aucune réservation active ne bloque le parc.
 
 ## API métier
 

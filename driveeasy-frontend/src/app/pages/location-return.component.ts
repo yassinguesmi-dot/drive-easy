@@ -2,8 +2,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LocationDetail, Location } from '../models/location';
+import { LocationDetail, Location, locationReference } from '../models/location';
 import { LocationService } from '../services/location.service';
+import { localIsoDate } from '../core/local-date';
 
 @Component({
   standalone: true,
@@ -12,7 +13,7 @@ import { LocationService } from '../services/location.service';
     <section class="page-head"><div><p class="eyebrow">CLÔTURE DU CONTRAT</p><h1>Retour du véhicule</h1><p class="muted">Vérifiez le compteur et calculez le montant final.</p></div><a class="button secondary" routerLink="/locations">← Locations</a></section>
     @if (detail(); as data) {
       <section class="return-grid">
-        <article class="panel"><div class="panel-heading"><div><h2>Résumé de la location</h2><p class="muted">#{{ data.location.id.slice(0, 8).toUpperCase() }}</p></div><span class="status-pill" [class]="data.location.statut.toLowerCase()">{{ data.location.statut }}</span></div>
+        <article class="panel"><div class="panel-heading"><div><h2>Résumé de la location</h2><p class="muted">{{ reference(data.location.id) }}</p></div><span class="status-pill" [class]="data.location.statut.toLowerCase()">{{ data.location.statut }}</span></div>
           <div class="profile-info"><p><small>Client</small><b>{{ data.client.prenom }} {{ data.client.nom }}</b></p><p><small>Véhicule</small><b>{{ data.vehicule.marque }} {{ data.vehicule.modele }} · {{ data.vehicule.immatriculation }}</b></p><p><small>Période prévue</small><b>{{ data.location.dateDebut | date:'dd/MM/yyyy' }} – {{ data.location.dateFinPrevue | date:'dd/MM/yyyy' }}</b></p><p><small>Compteur au départ</small><b>{{ data.location.kmDepart ?? data.vehicule.kilometrage }} km</b></p></div>
         </article>
         @if (result(); as finished) {
@@ -27,17 +28,19 @@ import { LocationService } from '../services/location.service';
 export class LocationReturnComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly service = inject(LocationService);
+  readonly reference = locationReference;
   readonly detail = signal<LocationDetail | null>(null);
   readonly result = signal<Location | null>(null);
   readonly saving = signal(false);
   kmRetour = 0;
-  returnDate = new Date().toISOString().slice(0, 10);
+  returnDate = localIsoDate();
   private readonly id = this.route.snapshot.paramMap.get('id')!;
 
   ngOnInit(): void {
     this.service.get(this.id).subscribe(value => {
       this.detail.set(value);
-      this.kmRetour = value.vehicule.kilometrage;
+      this.kmRetour = Math.max(value.vehicule.kilometrage, value.location.kmDepart ?? 0);
+      if (value.location.statut === 'TERMINEE') this.result.set(value.location);
     });
   }
 
@@ -49,7 +52,10 @@ export class LocationReturnComponent implements OnInit {
     }
     this.saving.set(true);
     this.service.finish(this.id, this.kmRetour, this.returnDate).subscribe({
-      next: value => this.result.set(value),
+      next: value => {
+        this.result.set(value);
+        this.detail.update(current => current ? { ...current, location: value } : current);
+      },
       error: () => this.saving.set(false)
     });
   }
